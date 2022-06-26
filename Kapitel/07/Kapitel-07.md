@@ -12,6 +12,15 @@ $$T_{turnaround}=T_{completion} - T_{arrival}$$
 
 Die Turnaroundzeit ist eine Performance Metrik und kann oft mit der Fairnessmetrik in Konflikt stehen.
 
+$$T_{responce}=T_{firstrun} - T_{arrival}$$
+
+* $T_{responce}$ ist die Zeit bis ein Prozess zum ersten mal gescheduled wird. 
+
+* $T_{firstrun}$ ist die Zeit wenn der Prozess das erste mal gescheduled wird.
+
+* $T_{arrival}$ ist die Ankuftszeit eines Prozesses.
+
+
 ### 3.2 Algorithmen
 
 #### 3.2.1 First In, First Out (FIFO)
@@ -19,3 +28,24 @@ Die Turnaroundzeit ist eine Performance Metrik und kann oft mit der Fairnessmetr
 Wer zu erst kommt, wird zuerst bedient. Das hat den Nachteil, das sehr kurze Prozesse auf einen langen warten müssen. Nennt man auch den **convoy effect**.
 
 #### 3.2.2 Shortest Job First (SJF)
+
+Die kürzesten Prozesse laufen zuerst, das erhöt die Responce Time aber ist schlecht für die Reaktionszeit.
+
+#### 3.2.3 Shortest Time to Completion First (STCF)
+
+Hier können Prozesse auch unterbrochen werden. Der Job mit der noch kürzesten laufzeit kommt zuerst drann.
+
+#### 3.2.4 Round Robin (RR)
+
+Für eine festgelegte Zeit (auch **time-slice** genannt), wird jeder Prozess gescheduled. Die Prozess wechseln sich nach dieser Zeit ab. Der Vorteil ist das Die Reaktionszeit jetzt gleich der festgelegten Zeit ist.
+
+
+### 3.3 Preemptive vs. Non-Preemptive
+
+Non-Preemptive Scheduler waren eher in alten Systemen gängig. Sie lassen jeden Prozess laufen bis er fertig ist. Preemptive Scheduler werden in nahezu jedem modernen OS verwendet. Hier können Prozesse während sie laufen auch unterbrochen werden.
+
+### Homework: Scheduler
+
+Der Simulator "scheduler.py" erlaubt es einem verschiedene Scheduling Algorithmen auszuprobieren. 
+
+
