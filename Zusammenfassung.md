@@ -15,38 +15,7 @@ lang: de
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-
-## TODO - All Chapters of the Semester
-
-* 1 - 3
-
-* 4,5 mit Homework
-
-* 6
-
-* 7,8 mit Homework
-
-* 13,14 mit Homework
-
-* 15,16 mit Homework
-
-* 17, 18 mit Homework
-
-* 19
-
-* 20 mit, 21 ohne, 22 mit
-
-* 26,27 mit Homework
-
-* 28,29 mit Homework
-
-* 30,31,32 mit Homework
-
-* 36 ohne, 37, 38 mit Homework
-
-
-
-## 1 Einleitung Betriebssysteme
+## 1 Einleitung Betriebssysteme (Kapitel 2)
 
 The Crux of the Problem: Wie und warum virtualisiert das Betriebssystem seine Ressourcen.
 
@@ -78,7 +47,7 @@ Manchmal auch einfach Adressraum genannt, ist "Die Abstraktion des physischen Sp
 
 Ist die fähigkeit auf einem Computer, mehrere Programme gleichezeitig auszuführen und nicht jedes Programm einzeln laufen zu lassen. Dies erlaubt es zum Beispiel ein weiteres Programm zu starten während ein anderes gerade auf I/O wartet.
 
-## 2 Der Prozess
+## 2 Der Prozess (Kaptitel 4)
 
 The Crux of the Problem: Wie stellt man die Illusion mehrerer CPUs zur Verfügung?
 
@@ -157,7 +126,7 @@ Wann die Prozesse wechseln lässt sich mit dem -S Flag steuern:
  * **IO_RUN_IMMEDIATE**: Sobald die I/O fertig ist, bekommt der Prozess sofort wieder CPU Zeit.
 
 
-## 3 Scheduler
+## 3 Scheduler (Kaptiel 7)
 
 ### 3.1 Scheduling Metriken
 
@@ -187,7 +156,7 @@ Wer zu erst kommt, wird zuerst bedient. Das hat den Nachteil, das sehr kurze Pro
 
 ## 7 Threads
 
-### 7.1 Thread-API
+### 7.1 Thread-API (Kaptitel 27)
 
 #### 7.1.1 Was ist ein Thread
 
@@ -246,7 +215,7 @@ Bei mehreren Argumenten:
 
 
 
-### 7.2 Locks
+### 7.2 Locks (Kapitel 28)
 
 #### 7.2.1 Was ist ein Lock
 
@@ -390,7 +359,7 @@ Um die Threads ähnlich einem Scheduler zu verwalten. (Code zu viel für Zusamme
 
 
 
-### 7.3 Condition-Variablen
+### 7.3 Condition-Variablen (Kapitel 30)
 
 
 #### 7.3.1 Was ist eine Condition-Variable
@@ -445,7 +414,7 @@ Condition-Variablen helfen bei der Synchronisation von Threads. Über  wait(cond
 
 
 
-### 7.4 Semaphoren
+### 7.4 Semaphoren (Kapitel 31)
 
 #### 7.4.1 Was ist eine Semaphore
 
