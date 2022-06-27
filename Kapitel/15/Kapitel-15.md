@@ -66,5 +66,21 @@ in assambly
 
  ### Homework
 
+```sh
+Options :
+-s    SEED
+-a    Adressspace size
+-p    physical memory size
+-n    number of generated addresses
+-b    Base 
+-l    limit
+```
+
+just calculate with base + virtual address if withing limit  
+
+base + virutal address = physical address
+
+if limit = 10 address 9 is the last valid
+
 
 
