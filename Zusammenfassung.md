@@ -47,7 +47,7 @@ Manchmal auch einfach Adressraum genannt, ist "Die Abstraktion des physischen Sp
 
 Ist die fähigkeit auf einem Computer, mehrere Programme gleichezeitig auszuführen und nicht jedes Programm einzeln laufen zu lassen. Dies erlaubt es zum Beispiel ein weiteres Programm zu starten während ein anderes gerade auf I/O wartet.
 
-## 2 Der Prozess (Kaptitel 4)
+## 2 Der Prozess (Kapitel 4)
 
 The Crux of the Problem: Wie stellt man die Illusion mehrerer CPUs zur Verfügung?
 
