@@ -48,4 +48,32 @@ Non-Preemptive Scheduler waren eher in alten Systemen gängig. Sie lassen jeden 
 
 Der Simulator "scheduler.py" erlaubt es einem verschiedene Scheduling Algorithmen auszuprobieren. 
 
+```bash
+arnold% ./scheduler.py -s 0 -c
+ARG policy FIFO
+ARG jobs 3
+ARG maxlen 10
+ARG seed 0
+
+Here is the job list, with the run time of each job: 
+  Job 0 ( length = 9 )
+  Job 1 ( length = 8 )
+  Job 2 ( length = 5 )
+
+
+** Solutions **
+
+Execution trace:
+  [ time   0 ] Run job 0 for 9.00 secs ( DONE at 9.00 )
+  [ time   9 ] Run job 1 for 8.00 secs ( DONE at 17.00 )
+  [ time  17 ] Run job 2 for 5.00 secs ( DONE at 22.00 )
+
+Final statistics:
+  Job   0 -- Response: 0.00  Turnaround 9.00  Wait 0.00
+  Job   1 -- Response: 9.00  Turnaround 17.00  Wait 9.00
+  Job   2 -- Response: 17.00  Turnaround 22.00  Wait 17.00
+
+  Average -- Response: 8.67  Turnaround 16.00  Wait 8.67
+```
+
 
