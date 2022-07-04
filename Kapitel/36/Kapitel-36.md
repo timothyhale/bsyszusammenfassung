@@ -45,9 +45,43 @@ and  context switch to another task
 -> causing cpu to jump into interrupt handler.
 - handler will finish request and wake process waiting for I/O, 
 wich then can proceed
+
 ### 36.5 More Efficient Data Movement with DMA
+- problem: when using programmed I/O (PIO) to transfer a large chunk of data
+- how to lower PIO overheads?
+  - -> Direct Memory Access (DMA) 
+- telling DMA where data lives in mem, how much data to copy, wich device to send to it
+![](Bilder/dma.png)
+
+
 ### 36.6 Methods of Device Interaction 
+- how to commucicate with devices?
+- first: explicit I/O instructions
+  - these instructions specify a way for the os to send data to 
+  specific device registers
+  - such instructions are privileged
+- second: memory-mapped I/O
+  - hardware makes device registers available as if they were mem locations
+  - os issues a load (to read) or a store (wo write) the adress
+
+
 ### 36.7 Fitting Into The OS: The Device Driver
+- how to build a device-neutral OS? -> abstraction!
+![](Bilder/fss.png)
+
+
 ### 36.8 Case Study: A Simple IDE Disk Driver
-### 36.9 Historical Notes
+![](Bilder/ideInterface.png)
+- 6 steps:
+  - wait for drive to be ready
+  - write parameters to command registers
+  - start the I/O
+  - data transer (for writes)
+  - handle interrupts
+  - error handling
+
 ### 36.10 Summary
+- two techniques, the interrupt and DMA, habe been introduced
+to help with device efficiency
+- two approaches to accesing device register, explicit I/O instuctions
+and memory-mapped I/O
