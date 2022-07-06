@@ -72,6 +72,7 @@ wich then can proceed
 
 ### 36.8 Case Study: A Simple IDE Disk Driver
 ![](Bilder/ideInterface.png)
+
 - 6 steps:
   - wait for drive to be ready
   - write parameters to command registers
