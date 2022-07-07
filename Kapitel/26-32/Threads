@@ -1,0 +1,310 @@
+## 26 Threads
+
+### 26.1 Thread-API
+
+#### 26.1.1 Was ist ein Thread
+
+... 
+	
+#### 26.1.2 Basic-Befehle:
+
+	pthread_t T1;	
+
+	pthread_create(&T1, NULL, worker_T1, args_T1);
+
+	void* worker(void* args)
+
+	pthread_join(T1, retval);
+
+	pthread_exit(NULL);
+
+
+
+#### 26.1.3 Thread-Argumente übergeben:
+
+Bei einem Argument:
+
+	int* arg = malloc(sizeof(int)); 	//Argumente sollten auf den Heap falls der Eltern-Thread zuerst beendet wird
+	
+	pthread_create(&T1, NULL, worker_T1, arg);
+
+
+
+Bei mehreren Argumenten:
+
+	struct arguments{
+		int arg1;
+		int arg2;
+	};
+
+	struct arguments* args = malloc(sizeof(struct arguments)); 	//Auch hier: argumente auf den Heap = good practice
+
+	
+	pthread_create(&T1, NULL, worker_T1, args);
+	
+
+
+
+
+#### 26.1.4 Thread-return:
+
+	void* worker(void* args) {
+
+		//... do something ....
+
+		int* retval = malloc(sizeof(int));    	//**Returnvalues müssen auf den HEAP, da der Thread beendet wird!!!**
+		return (void*)retval;
+	}
+
+
+
+
+### 27.2 Locks
+
+#### 27.2.1 Was ist ein Lock
+
+...
+
+#### 27.2.2 Lock-API (mutex)
+
+Es gibt zwei Möglichkeiten einen Lock zu initialisieren:
+
+	pthread_mutex_t  mutex1  =  PTHREAD_MUTEX_INITIALIZER;  //direkte initialisierung
+
+	pthread_mutex_t  mutex2;
+	pthread_mutex_init( &mutex2,  NULL );		//indirekte initialisierung
+
+	assert(pthread_mutex_init( &mutex2,  NULL ));	//assertion = good practice
+
+
+
+Locks können immer nur von einem Thread gehalten werden:
+
+	pthread_mutex_lock( &mutex1 );
+		
+		// .. do something in critical section ..
+
+	pthread_mutex_unlock( &mutex1 );
+
+
+#### 27.2.3 Spinlock
+
+Ein Spinlock ist die einfachste Form des Locks. Allerdings hat er zwei Probleme: während Threads auf den Lock
+warten, laufen sie mit ständigen Anfragen in der while-Schleife leer, ausserdem ist nicht sichergestellt, dass ein Thread
+einen Lock überhaupt bekommt, wenn er immer im falschen Moment CPU-Zeit bekommt.
+
+	typedef struct __lock_t {
+		int flag;
+ 	} lock_t;
+
+ 	void init(lock_t *lock) {
+ 		lock->flag = 0;		//  0 = unlocked,   1 = locked
+ 	}
+
+
+
+	void lock(lock_t *lock) {
+ 		while (TestAndSet(&lock->flag, 1) == 1); 	// solange gelockt spin mit while
+ 	}
+
+ 	void unlock(lock_t *lock) {
+ 		lock->flag = 0;
+ 	}
+
+
+
+	int TestAndSet(int *old_ptr, int new) {	// ALLES HIER IST ATOMIC!!!
+		int old = *old_ptr; 	
+		*old_ptr = new; 	
+		return old; 			
+	}
+
+
+
+
+#### 27.2.4  Ticket-Spinlock
+
+Ein Ticket-Lock kann genau wie ein Spinlock funktionieren, allerdings ist klar geregelt, welcher Thread
+den Lock als nächstes bekommt. Beim normalen Spinlock entscheidet der Scheduler, wer überhaupt die Möglichkeit bekommt,
+einen freien Lock zu packen und sorgt im schlimmsten Fall dafür,
+Das Threads ewig auf einen Lock warten. Mit dem Ticket-System ist zumindest dieses Problem gelöst.
+
+
+	typedef struct __lock_t {
+		int ticket;
+		int turn;
+	} lock_t;
+
+
+ 	void lock_init(lock_t *lock) {
+ 		lock->ticket = 0;
+ 		lock->turn = 0;
+ 	}
+
+
+ 	void lock(lock_t *lock) {
+ 		int myturn = FetchAndAdd(&lock->ticket);
+ 		while (lock->turn != myturn)			; // Auch hier kommt ein Spin zum einsatz
+ 	}
+
+
+ 	void unlock(lock_t *lock) {
+ 		lock->turn = lock->turn + 1;
+ 	}
+
+
+
+	int FetchAndAdd(int *ptr) {		// ALLES HIER IST ATOMIC!!!
+ 		int old = *ptr;
+ 		*ptr = old + 1;
+ 		return old;
+ 	}
+
+
+
+#### 27.2.5 yield statt spin
+
+Locks können, statt zu spinnen auch einfach die CPU abgeben, um so unnötiges warten zu verhindern. In der Realität
+Ist ein Spin aber meisstens trotzdem für kurze Zeit erwünscht, moderne Systeme nutzen daher ein hybrides System. Sogenannte **TWO-PHASED-LOCKS**
+
+	void lock() {
+ 		while (TestAndSet(&flag, 1) == 1)
+		yield(); 				// unter linux: sched_yield()
+	}
+	
+ 	void unlock() {
+ 		flag = 0;
+ 	}
+
+
+
+
+#### 27.2.6 Lock-Queue
+
+Eine Lock-Queue funktioniert ähnlich wie ein Ticket-System, und nutzt Funktionen wie 
+	queue_add(id)
+	park;
+	unpark;
+Um die Threads ähnlich einem Scheduler zu verwalten. (Code zu viel für Zusammenfassung)
+
+
+
+#### 27.2.7 Pettersons-Algorithmus
+
+
+....
+
+
+
+#### 27.2.8 Homework (Simulation)
+
+
+....
+
+
+
+### 30.3 Condition-Variablen
+
+
+#### 30.3.1 Was ist eine Condition-Variable
+
+Condition-Variablen helfen bei der Synchronisation von Threads. Über  wait(condition-variable)  können sich Threads "schlafen legen und auf   signal(condition-variable)  von anderen Threads warten. Damit lässt sich auch eine Barriere für Threads bauen, die mehere Threads an einer Stelle aufählt, bis eine globale Bedingung erfüllt ist. Solche Funktionen sind insbesondere bei Producer-Consumer-Verhältnissen wichtig. Ist der Buffer leer? wait! Ist der Buffer voll? signal!
+
+
+
+#### 30.3.2 Cond-API
+	
+
+	pthread_cond_t   condition_var;
+
+	condition_var  =  PTHREAD_COND_INITIALIZER;
+ 
+	pthread_cond_signal(&condition_var);
+
+	pthread_cond_wait(&condition_var, &lock);
+
+**ACHTUNG: wait() geht davon aus, dass der Thread der wait aufruft einen Lock, der wait() lockt in besitz hat. Wait gibt diesen Lock während des wartens frei!!** 
+
+	
+#### 30.3.3 Simpler Condition-Join
+
+Über eine Condition Variable kann eine simple Alternative zu pthread_join gebaut werden.
+
+
+	void thread_join(){
+    		pthread_mutex_lock(&lock);				// LOCKS SIND WICHTIG, DA SONST INTERRUPT IN DER WHILE SCHLEIFE
+    		while(thread_end == false){                             // while statt if, good practice da if Probleme verursachen kann
+        		pthread_cond_wait(&condition, &lock);   	// Solange end nicht true ist, wartet die Funktion join() die Condition-Variable stellt hier somit eine Barriere dar 
+    		}
+    		pthread_mutex_unlock(&lock);
+	}
+
+	void thread_exit(){
+    		pthread_mutex_lock(&lock);
+    		end = true;
+    		pthread_cond_signal(&condition);			// Sobald der gewünschte Thread das Signal gibt, wird die "Barriere" mit wait() aufgehoben.
+    		pthread_mutex_unlock(&lock);
+	}
+
+
+
+#### 30.3.4 Barriere
+
+**Info - es gibt auch vorgefertigte Barrieren in POSIX: pthread_barrier_t  mit  pthread_barrier_wait()**
+
+
+...... funktionierender Code fehlt noch .....
+
+
+
+
+### 31.4 Semaphoren
+
+#### 31.4.1 Was ist eine Semaphore
+
+Eine Semaphore steuert, wie viele "User" gleichzeitig auf eine Resource zugreifen können. Diese können unter Linux "einzeln eingelassen" werden. Mit einer Semaphore die den Wert 1 bekommt, lässt sich zudem ein simpler Lock bauen, da in diesem Fall ja nur ein User jeweils auf die Semaphore zugreift. Gesteuert wird die Semaphore über einen Internen Zähler. Ist dieser auf 0, werden alle Threads die *sem_wait* aufrufen vorerst schalfen gelegt. Nun kann der Zähler mit *sem_post* um 1 inkrementiert werden. Die Semaphore lässt nun einen Thread passieren.
+
+
+
+#### 31.4.2. Sem-API
+
+	sem_t semaphore1;
+	
+	sem_wait(&semaphore1);   
+
+	sem_post(&semaphore1);
+
+
+
+#### 31.4.3 Code einer Semaphore (aus ostep geklaut)
+
+	typedef struct __Zem_t {
+		int value;
+ 		pthread_cond_t cond;
+ 		pthread_mutex_t lock;
+ 	} Zem_t;
+
+
+ 	void Zem_init(Zem_t *s, int value) {
+ 		s->value = value;
+ 		Cond_init(&s->cond);
+ 		Mutex_init(&s->lock);
+ 	}
+
+ 	void Zem_wait(Zem_t *s) {
+ 		Mutex_lock(&s->lock);
+ 		while (s->value <= 0)
+ 		Cond_wait(&s->cond, &s->lock);
+ 		s->value--;
+ 		Mutex_unlock(&s->lock);
+ 	}
+
+ 	void Zem_post(Zem_t *s) {
+ 		Mutex_lock(&s->lock);
+ 		s->value++;
+ 		Cond_signal(&s->cond);
+ 		Mutex_unlock(&s->lock);
+ 	}
+
+
+#### 31.4.4 Dining-Philosophers-Problem
