@@ -353,20 +353,19 @@ int turn;
 int flag[2];
 
 void thread_1(){
-	flag[0] = 1;
-	turn = 2;
-	while(flag[0] && turn == 2);
-	//--Hier Critical Section--
-	flag[0] = 0;
-
+    flag[0] = 1;
+    turn = 2;
+    while(flag[0] && turn == 2);
+    //--Hier Critical Section--
+    flag[0] = 0;
 
 void thread_2(){
-	flag[1] = 1
-	turn = 1;
-	while(flag[1] && turn == 1);
-	//--Hier Critical Section--
-	flag[1] = 0;
-	
+    flag[1] = 1
+    turn = 1;
+    while(flag[1] && turn == 1);
+    //--Hier Critical Section--
+    flag[1] = 0;
+
 
 
 
