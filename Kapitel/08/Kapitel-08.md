@@ -24,6 +24,10 @@ Lange jobs verhungern in der MLFQ weil ihre priorität stetig sinkt. Dies kann v
 
 * **Rule 5:** After some time period S, move all the jobs in the system to the topmost queue.
 
+### 4.5 Voo-Doo Constants
+
+Eine Voodoo Konstante wäre zum Beispiel die Periode in welcher ein Prozess auf eine höhere Priorität geboosted wird. Wenn sie zu hoch angesetzt wird, verhungern größere jobs, ist sie zu klein laufen interaktive jobs vielleicht nicht lange genug. Es gibt keinen eindeutig richtigen Wert.
+
 ### 4.5 Homework
 
 Der Simulator mlfq.py demonstriert das verhalten des mlfq Schedulers.
