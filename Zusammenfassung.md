@@ -347,8 +347,26 @@ Um die Threads ähnlich einem Scheduler zu verwalten. (Code zu viel für Zusamme
 
 #### 7.2.7 Pettersons-Algorithmus
 
+Der Peterson-Alogrithmus ist ein bescheidener Alogrithmus. Threads geben hier die Kontrolle freiwillig an die anderen wartenden Threads ab.
 
-....
+int turn;
+int flag[2];
+
+void thread_1(){
+	flag[0] = 1;
+	turn = 2;
+	while(flag[0] && turn == 2);
+	//--Hier Critical Section--
+	flag[0] = 0;
+
+
+void thread_2(){
+	flag[1] = 1
+	turn = 1;
+	while(flag[1] && turn == 1);
+	//--Hier Critical Section--
+	flag[1] = 0;
+	
 
 
 
